@@ -1,0 +1,194 @@
+<html>
+<body>
+<pre>
+<h1>µVision Build Log</h1>
+<h2>Tool Versions:</h2>
+IDE-Version: µVision V5.29.0.0
+Copyright (C) 2019 ARM Ltd and ARM Germany GmbH. All rights reserved.
+License Information: Ayman Nasr, None, LIC=----
+ 
+Tool Versions:
+Toolchain:       MDK-Lite  Version: 5.29.0.0
+Toolchain Path:  C:\Keil_v5\ARM\ARMCC\Bin
+C Compiler:      Armcc.exe V5.06 update 6 (build 750)
+Assembler:       Armasm.exe V5.06 update 6 (build 750)
+Linker/Locator:  ArmLink.exe V5.06 update 6 (build 750)
+Library Manager: ArmAr.exe V5.06 update 6 (build 750)
+Hex Converter:   FromElf.exe V5.06 update 6 (build 750)
+CPU DLL:         SARMCM3.DLL V5.29.0.0
+Dialog DLL:      DCM.DLL V1.17.3.0
+Target DLL:      UL2CM3.DLL V1.163.0.0
+Dialog DLL:      TCM.DLL V1.36.5.0
+ 
+<h2>Project:</h2>
+C:\Keil_v5\TExaSware\Test\RTOS_Test.uvprojx
+Project File Date:  03/13/2020
+
+<h2>Output:</h2>
+*** Using Compiler 'V5.06 update 6 (build 750)', folder: 'C:\Keil_v5\ARM\ARMCC\Bin'
+Build target 'Target 1'
+compiling main.c...
+C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h(51): warning:  #1295-D: Deprecated declaration LCD_Clear - give arg types
+  void LCD_Clear();
+C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h(57): warning:  #1295-D: Deprecated declaration LCD_Shift_Cursor_Left - give arg types
+  void LCD_Shift_Cursor_Left();
+C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h(58): warning:  #1295-D: Deprecated declaration LCD_Shift_Cursor_Right - give arg types
+  void LCD_Shift_Cursor_Right();
+C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h(59): warning:  #1295-D: Deprecated declaration LCD_Shift_Cursor_Up - give arg types
+  void LCD_Shift_Cursor_Up();
+C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h(60): warning:  #1295-D: Deprecated declaration LCD_Shift_Cursor_Down - give arg types
+  void LCD_Shift_Cursor_Down();
+C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h(62): warning:  #1295-D: Deprecated declaration LCD_Back - give arg types
+  void LCD_Back();
+C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h(63): warning:  #1295-D: Deprecated declaration LCD_Blink - give arg types
+  void LCD_Blink();
+C:/Keil_v5/TExaSware/RTOS/Keypad/keypad.h(39): warning:  #1-D: last line of file ends without a newline
+  #endif
+C:/Keil_v5/TExaSware/RTOS/EEPROM/EEPROM.h(12): warning:  #1-D: last line of file ends without a newline
+  #endif
+C:/Keil_v5/TExaSware/RTOS/UART/uart.h(113): warning:  #1-D: last line of file ends without a newline
+  #endif
+main.c(16): warning:  #1295-D: Deprecated declaration GPIO_init - give arg types
+  void GPIO_init();
+main.c(17): warning:  #1295-D: Deprecated declaration test_LCD - give arg types
+  void test_LCD();
+main.c(18): warning:  #1295-D: Deprecated declaration UART_Config - give arg types
+  void UART_Config(); 
+main.c(19): warning:  #1295-D: Deprecated declaration test_LCD - give arg types
+  void test_LCD();
+main.c(20): warning:  #1295-D: Deprecated declaration password_approved - give arg types
+  void password_approved();
+main.c(21): warning:  #1295-D: Deprecated declaration Login - give arg types
+  void Login();
+main.c(26): warning:  #1295-D: Deprecated declaration buzzer - give arg types
+  void buzzer();
+main.c(27): warning:  #1295-D: Deprecated declaration LCD_correct - give arg types
+  void LCD_correct();
+main.c(41): warning:  #1295-D: Deprecated declaration RTOS_vInitProject - give arg types
+  void RTOS_vInitProject();
+main.c(69): warning:  #188-D: enumerated type mixed with another type
+  		EEPROM_Init(0);
+main.c(83): warning:  #188-D: enumerated type mixed with another type
+  					return 0;
+main.c(86): warning:  #188-D: enumerated type mixed with another type
+  	return 1;
+main.c(284): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.AlternateFunctionSelect = 0;
+main.c(285): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.AnalogModeSelect = 0;
+main.c(286): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.Commit = 1;
+main.c(287): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.DigitalEnable = 1;
+main.c(288): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.Direction = Output;
+main.c(289): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.Lock = 1;
+main.c(291): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.PullDownSelect = 0;
+main.c(292): warning:  #188-D: enumerated type mixed with another type
+  	portApin2.PullUpSelect = 0;
+main.c(299): warning:  #188-D: enumerated type mixed with another type
+  	portDpin3.AlternateFunctionSelect = 0;
+main.c(300): warning:  #188-D: enumerated type mixed with another type
+  	portDpin3.AnalogModeSelect = 0;
+main.c(301): warning:  #188-D: enumerated type mixed with another type
+  	portDpin3.Commit = 1;
+main.c(302): warning:  #188-D: enumerated type mixed with another type
+  	portDpin3.DigitalEnable = 1;
+main.c(303): warning:  #188-D: enumerated type mixed with another type
+  	portDpin3.Direction = Output;
+main.c(305): warning:  #188-D: enumerated type mixed with another type
+  	portDpin3.PullDownSelect = 0;
+main.c(306): warning:  #188-D: enumerated type mixed with another type
+  	portDpin3.PullUpSelect = 0;
+main.c: 37 warnings, 0 errors
+linking...
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol EEPROM_Init (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol EEPROM_WriteData (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol GPIO_InitialPin (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol KeyPad_getPressedKey (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Back (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Blink (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Clear (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Init (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Set_Cursor_Position (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Shift_Cursor_Left (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Shift_Cursor_Right (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Write_Char (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Write_Command (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Write_String (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol LCD_Write_String_Position (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol delay_m (referred from main.o).
+.\Objects\RTOS_Test.axf: Error: L6218E: Undefined symbol keypad_Init (referred from main.o).
+Not enough information to list image symbols.
+Not enough information to list load addresses in the image map.
+Finished: 2 information, 0 warning and 17 error messages.
+".\Objects\RTOS_Test.axf" - 17 Error(s), 37 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.5.6.0.pack
+                ARM.CMSIS.5.6.0
+                CMSIS (Cortex Microcontroller Software Interface Standard)
+   * Component: CORE Version: 5.3.0
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS-FreeRTOS.10.3.0.pack
+                ARM.CMSIS-FreeRTOS.10.3.0
+                Bundle of FreeRTOS for Cortex-M and Cortex-A
+   * Component: Config Variant: FreeRTOS Version: 10.2.1
+   * Component: Core Variant: Cortex-M Version: 10.2.1
+   * Component: Heap Variant: Heap_4 Version: 10.2.1
+   * Component: Timers Version: 10.2.1
+
+Package Vendor: Keil
+                http://www.keil.com/pack/Keil.TM4C_DFP.1.1.0.pack
+                Keil.TM4C_DFP.1.1.0
+                Texas Instruments Tiva C Series Device Support and Examples
+   * Component: Startup Version: 1.0.1
+
+<h2>Collection of Component include folders:</h2>
+  .\RTE\RTOS
+  .\RTE\_Target_1
+  C:\Users\Ayman\AppData\Local\Arm\Packs\ARM\CMSIS-FreeRTOS\10.3.0\CMSIS\RTOS2\FreeRTOS\Include
+  C:\Users\Ayman\AppData\Local\Arm\Packs\ARM\CMSIS-FreeRTOS\10.3.0\Source\include
+  C:\Users\Ayman\AppData\Local\Arm\Packs\ARM\CMSIS-FreeRTOS\10.3.0\Source\portable\RVDS\ARM_CM4F
+  C:\Users\Ayman\AppData\Local\Arm\Packs\ARM\CMSIS\5.6.0\CMSIS\Core\Include
+  C:\Users\Ayman\AppData\Local\Arm\Packs\Keil\TM4C_DFP\1.1.0\Device\Include\TM4C123
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM.FreeRTOS::RTOS:Config:FreeRTOS:10.2.1
+      Include file:  Config\ARMCM\FreeRTOSConfig.h
+
+   * Component: ARM.FreeRTOS::RTOS:Core:Cortex-M:10.2.1
+      Source file:   Source\portable\RVDS\ARM_CM4F\port.c
+      Include file:  Source\include\FreeRTOS.h
+      Include file:  Source\include\semphr.h
+      Include file:  Source\include\queue.h
+      Include file:  Source\include\task.h
+      Source file:   Source\list.c
+      Source file:   Source\queue.c
+      Source file:   Source\tasks.c
+      Source file:   CMSIS\RTOS2\FreeRTOS\Source\freertos_evr.c
+
+   * Component: ARM.FreeRTOS::RTOS:Heap:Heap_4:10.2.1
+      Source file:   Source\portable\MemMang\heap_4.c
+
+   * Component: ARM.FreeRTOS::RTOS:Timers:10.2.1
+      Source file:   Source\timers.c
+      Include file:  Source\include\timers.h
+
+   * Component: ARM::CMSIS:CORE:5.3.0
+
+   * Component: Keil::Device:Startup:1.0.1
+      Source file:   Device\Source\system_TM4C123.c
+      Source file:   Device\Source\ARM\startup_TM4C123.s
+      Include file:  Device\Include\TM4C123\TM4C123.h
+Target not created.
+Build Time Elapsed:  00:00:01
+</pre>
+</body>
+</html>

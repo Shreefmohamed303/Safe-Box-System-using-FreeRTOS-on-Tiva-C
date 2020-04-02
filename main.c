@@ -1,19 +1,28 @@
 #include <stdint.h>
 #include <FreeRTOS.h>
 #include <task.h>
+#include <queue.h>
 
-#include "C:/Keil_v5/TExaSware/RTOS/GPIO_Drivers/Data_Type.h"
-#include "C:/Keil_v5/TExaSware/RTOS/GPIO_Drivers/GPIO.h"
-#include "C:/Keil_v5/TExaSware/RTOS/LCD/lcd.h"
-#include "C:/Keil_v5/TExaSware/RTOS/Keypad/keypad.h"
-#include "C:/Keil_v5/TExaSware/RTOS/EEPROM/EEPROM.h"
-#include "C:/Keil_v5/TExaSware/RTOS/UART/uart.h"
+#include "LCD/lcd.h"
+#include "Keypad/keypad.h"
+#include "GPIO_Drivers/GPIO.h"
+#include "GPIO_Drivers/EEPROM.h"
+#include "GPIO_Drivers/Data_Type.h"
+#include "UART/uart.h" 
+#include "tm4c123gh6pm.h"
 
+/*************************** MACROOS *************************/ 
+#define PASSWORD_SIZE 	 	4
+#define MAX_PRIORITY 		 	6
+#define NUM_OF_COMMANDS		3
 
-#define PASSWORD_SIZE 4
-
+// Command Macroos 
+#define OPEN 		'1' 
+#define CLOSE		'2'
+#define RESET		'3'
 /*************************** FUNCTION DECLRATIONS *************************/ 
-void GPIO_init();
+static void prvHardwareSetup (void);
+void GPIO_config();
 void test_LCD();
 void UART_Config(); 
 void test_LCD();
@@ -32,61 +41,142 @@ int32_t charToint(char * arr);
 /************************** HANDLE STRUCTS ********************************/ 
 UART_HandleTypedef huart ; 
 
-
 /************************** GLOBAL VARIABLES *******************************/
-
 char pw_true[PASSWORD_SIZE];
 
-/***************************RTOS TASKS DECLRATIONS *************************/ 
-void RTOS_vInitProject();
+/************************** RTOS Handles  *******************************/
+	// Task Handles 
+ TaskHandle_t xHandle_GetPasswordTask = NULL ;
+ TaskHandle_t xHandle_LoginValidTask = NULL ;
+ TaskHandle_t xHandle_DisplayCommandTask = NULL ;
+ TaskHandle_t xHandle_GetCommandTask = NULL;
+ TaskHandle_t xHandle_CommandProcessingTask = NULL;
+ 
+ // Queue Handles 
+ QueueHandle_t xHandle_commandQueue  = NULL ;
+ QueueHandle_t xHandle_passowrdQueue = NULL ;
+/***************************RTOS TASKS DECLRATIONS *************************/
 
+void RTOS_vGetPassword();
+void RTOS_vLoginValid();
+void RTOS_vDisplayCommand();
+void RTOS_vGetCommand();
+void RTOS_CommandProcessing();
 
 int main()
 {
-	TaskHandle_t xInit;
 	
-	xTaskCreate(RTOS_vInitProject, "INIT_TASK", configMINIMAL_STACK_SIZE , NULL, 1 , &xInit);		
 	
+		// Setup our Hardware 
+		prvHardwareSetup (); 
+		
+		// Creation of The Queues 
+		xHandle_commandQueue  = xQueueCreate(NUM_OF_COMMANDS , sizeof(char)); 
+		xHandle_passowrdQueue = xQueueCreate(PASSWORD_SIZE, sizeof(char)) ; 
+	
+		if(xHandle_commandQueue != NULL && xHandle_passowrdQueue !=NULL)
+		{
+			  // Creation of Tasks 
+				xTaskCreate(RTOS_vGetPassword, "GET_PASSWORD", configMINIMAL_STACK_SIZE, NULL, 3, &xHandle_GetPasswordTask);
+				xTaskCreate(RTOS_vLoginValid, "LOGIN_VALID", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle_LoginValidTask);
+				xTaskCreate(RTOS_vDisplayCommand, "DISPLAY_COMMAND", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle_DisplayCommandTask);
+				xTaskCreate(RTOS_vGetCommand, "GET_COMMAND", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle_GetCommandTask);
+				xTaskCreate(RTOS_CommandProcessing, "COMMAND_PROCESSING", configMINIMAL_STACK_SIZE, NULL, 1, &xHandle_CommandProcessingTask);
+		}
 		
     // Startup of the FreeRTOS scheduler.  The program should block here.
     //vTaskStartScheduler();
 
-
-			// The following line should never be reached.  Failure to allocate enough
+    // The following line should never be reached.  Failure to allocate enough
     // memory from the heap would be one reason.
     for (;;);
 
 }
 
 
-/*************************** RTOS TASKS DEFINITIONS *************************/ 
-void RTOS_vInitProject(){
+/*************************** RTOS TASKS DEFINITIONS *************************/
+static void prvHardwareSetup (void)
+{
+	// Config Functions
+		GPIO_config(); 
+		UART_Config();
 	
-	for(;;){
-		GPIO_init();	
+	// init Functions 
+		UART4_init(&huart); 
 		keypad_Init();
 		LCD_Init();
-			EEPROM_Init(0);
-	}
-	
+		EEPROM_Init(0);
+		//EEPROM_WriteData(0,0,1234);
 }
 
+void RTOS_vGetPassword (void *vparam)
+{
+	char PW_check [PASSWORD_SIZE];
+	while(1)
+	{
+		// 1. Getting Password from User
+		getPassword(PW_check);
+		
+		// 2. Writing Passoword to the Queue 
+		xQueueSend(xHandle_passowrdQueue,&PW_check,portMAX_DELAY);
+	
+		// 3. Notify "LOGIN_VALID" Task 
+		xTaskNotify(xHandle_LoginValidTask,0,eNoAction); 
+	
+		// 4. Lets wait here until someone Notifies
+		xTaskNotifyWait(0,0,NULL,portMAX_DELAY);
+	}
+		
+}
 
+void RTOS_vDisplayCommand (void *vParam)
+{
+	while(1)
+	{
+		// 1. Lets wait here until someone Notifies
+		xTaskNotifyWait(0,0,NULL,portMAX_DELAY);
+		
+		// 2. Print Command List to the LCD 
+		LCD_Clear();
+		LCD_Write_String_Position(0,0,"1-Open");
+		LCD_Write_String_Position(0,8,"2-Close");
+		LCD_Write_String_Position(1,0,"3-Reset Password");
+		
+		// 3. Notify "GET_COMMAND" Task 
+		xTaskNotify(xHandle_GetCommandTask,0,eNoAction); 
+		
+		// 4. Lets wait here until someone Notifies
+		xTaskNotifyWait(0,0,NULL,portMAX_DELAY);
+	}
+}
 
-
+void RTOS_vGetCommand (void *vParam)
+{
+	char command ; 
+	while(1)
+	{
+		// 1. Lets wait here until someone Notifies
+		xTaskNotifyWait(0,0,NULL,portMAX_DELAY);
+		
+		// 2. Get The Command from The User 
+		 command = KeyPad_getPressedKey();
+		
+		while(command >'3')
+		{
+			LCD_Clear();
+			LCD_Write_String_Position(0,0,"Invalid Command");
+			command = KeyPad_getPressedKey();
+		}
+		// 3. Write The Command into Command Queue 
+		xQueueSendToBack(xHandle_commandQueue,&command,portMAX_DELAY); 
+		
+		// 4. Notify "COMMAND_PROCESSING" Task 
+		xTaskNotify(xHandle_CommandProcessingTask,0,eNoAction); 
+		
+	}
+}
 /*************************** FUNCTION DEFINITIONS *************************/ 
 
-bool Login_Validation(char * pw_arr , char* pw_true)
-{
-	
-	for ( uint8_t j=0; j<PASSWORD_SIZE; j++){
-				if(pw_arr[j] != pw_true[j]){
-					GPIO_PORTD_APB_DATA_PIN3 = 0x08;
-					return 0;
-				}
-		}
-	return 1;
-}
 
 void getPassword(char * pw_arr)
 {	
@@ -134,17 +224,13 @@ void getPassword(char * pw_arr)
 				space_counter++;
 			}
 
-			delay_m(1000);
+			vTaskDelay(1000);
 	}
 }
 
 void Login()
 {
-		LCD_Clear();
-		LCD_Write_String_Position(0,0,"1-Open");
-		LCD_Write_String_Position(0,8,"2-Close");
-		LCD_Write_String_Position(1,0,"3-Reset Password");
-	
+
 		while(1)
 		{
 			char c = KeyPad_getPressedKey();
@@ -279,7 +365,7 @@ int32_t charToint(char * arr)
 	
 }
 
-void GPIO_init(){
+void GPIO_config(){
 	
 	GPIO_HandlingPin portApin2;
   portApin2.PortBase = GPIO_PORTA_APB_BASE;
@@ -309,5 +395,4 @@ void GPIO_init(){
 	portDpin3.PortControl = 0;
 	
 	GPIO_InitialPin(&portDpin3);
-	
 }
